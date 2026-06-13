@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Fukushima Excellence Award</title>
+<style>
+  :root{
+    --bg-0:    #0a1322;
+    --bg-1:    #0f1d33;
+    --gold:    #d4b15f;
+    --gold-2:  #f0d98c;
+    --gold-3:  #b8923f;
+    --ink:     #eef1f8;
+    --ink-soft:#9aa6bd;
+    --line:    rgba(212,177,95,.22);
+    --line-2:  rgba(212,177,95,.40);
+    --card:    rgba(255,255,255,.035);
+    --good:    #43c08a;
+    --danger:  #e0758a;
+    --shadow:  0 18px 50px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic UI","Noto Sans JP",system-ui,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(900px 480px at 50% -8%, rgba(212,177,95,.18), transparent 62%),
+      radial-gradient(700px 500px at 100% 100%, rgba(40,72,120,.35), transparent 60%),
+      linear-gradient(165deg,var(--bg-1) 0%, var(--bg-0) 100%);
+    background-attachment:fixed;
+    -webkit-font-smoothing:antialiased;font-size:15px;line-height:1.55;min-height:100vh;
+  }
+  .serif{font-family:"Hiragino Mincho ProN","Yu Mincho","Times New Roman",serif;}
+  .wrap{max-width:520px;margin:0 auto;padding:0 16px calc(80px + env(safe-area-inset-bottom));}
+
+  /* ===== Header ===== */
+  header.hero{text-align:center;padding:calc(40px + env(safe-area-inset-top)) 18px 30px;position:relative;}
+  .crest{
+    width:54px;height:54px;margin:0 auto 18px;border:1.5px solid var(--line-2);border-radius:50%;
+    display:grid;place-items:center;font-size:24px;
+    background:radial-gradient(circle at 50% 35%, rgba(212,177,95,.22), transparent 70%);
+    box-shadow:0 0 24px rgba(212,177,95,.18), inset 0 0 16px rgba(212,177,95,.10);
+  }
+  .eyebrow{font-size:10px;letter-spacing:.42em;text-transform:uppercase;font-weight:700;margin:0 0 14px;color:var(--gold);}
+  .eyebrow::before,.eyebrow::after{content:"—";opacity:.5;margin:0 10px;}
+  .hero h1{
+    margin:0;font-size:30px;line-height:1.22;font-weight:700;letter-spacing:.02em;
+    background:linear-gradient(180deg,var(--gold-2) 0%, var(--gold) 55%, var(--gold-3) 100%);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+    text-shadow:0 2px 20px rgba(212,177,95,.18);
+  }
+  .hero h1 .jp{
+    -webkit-text-fill-color:initial;display:block;font-size:12.5px;font-weight:500;color:#aebbd0;
+    letter-spacing:.2em;margin-top:12px;font-family:"Hiragino Kaku Gothic ProN",system-ui,sans-serif;
+  }
+  .rule{display:flex;align-items:center;justify-content:center;gap:12px;margin:18px auto 0;max-width:240px;}
+  .rule i{height:1px;flex:1;background:linear-gradient(90deg,transparent,var(--line-2),transparent);}
+  .rule b{color:var(--gold);font-size:9px;letter-spacing:.3em;}
+  .hero-sub{margin:16px 0 0;color:var(--ink-soft);font-size:12.5px;letter-spacing:.04em;}
+
+  /* ===== Inputs ===== */
+  input[type=month],input[type=text]{
+    font:inherit;border:1px solid var(--line);background:rgba(0,0,0,.22);border-radius:0;
+    padding:12px;color:var(--ink);outline:none;width:100%;transition:border-color .15s, box-shadow .15s;
+  }
+  input:focus{border-color:var(--gold);box-shadow:inset 0 -2px 0 var(--gold), 0 0 0 1px rgba(212,177,95,.25);}
+  ::placeholder{color:#6b7589;}
+  input[type=month]{color-scheme:dark;}
+
+  /* ===== Toolbar ===== */
+  .toolbar{display:flex;gap:10px;align-items:flex-end;margin:6px 0 16px;}
+  .month-pick{flex:1 1 auto;min-width:0;}
+  .month-pick input[type=month]{min-width:0;max-width:170px;}
+  label.lbl{display:block;font-size:10px;color:var(--gold);font-weight:700;letter-spacing:.18em;margin:0 0 6px;text-transform:uppercase;}
+  .toggle-edit{
+    flex:0 0 auto;background:transparent;border:1px solid var(--line-2);color:var(--gold);
+    padding:12px 16px;font-size:13px;font-weight:700;border-radius:0;cursor:pointer;white-space:nowrap;
+    transition:background .15s,color .15s;
+  }
+  .toggle-edit.on{background:linear-gradient(180deg,var(--gold-2),var(--gold-3));color:#1a1303;border-color:transparent;}
+
+  /* ===== Identity ===== */
+  .id-card{
+    background:var(--card);border:1px solid var(--line);padding:16px;margin:0 0 22px;backdrop-filter:blur(6px);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+  }
+  .id-row{display:flex;gap:10px;align-items:stretch;}
+  .id-row input{flex:1;}
+  .pill-you{
+    background:linear-gradient(180deg,var(--gold-2),var(--gold-3));color:#1a1303;font-size:13px;font-weight:800;
+    padding:0 16px;white-space:nowrap;display:flex;align-items:center;letter-spacing:.04em;
+  }
+
+  /* ===== Section head ===== */
+  .sec-head{display:flex;align-items:center;justify-content:space-between;margin:0 2px 14px;}
+  .sec-head h2{font-size:11px;margin:0;letter-spacing:.3em;color:var(--gold);font-weight:700;}
+  .sec-head .count{font-size:12px;color:var(--ink-soft);font-variant-numeric:tabular-nums;letter-spacing:.04em;}
+
+  /* ===== Nominee cards ===== */
+  .nominees{display:grid;gap:14px;}
+  .nom{
+    position:relative;background:var(--card);border:1px solid var(--line);backdrop-filter:blur(6px);
+    padding:18px 18px 15px;transition:border-color .2s, box-shadow .2s, transform .12s;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.04);overflow:hidden;
+  }
+  .nom::before{content:"";position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(180deg,var(--gold-2),var(--gold-3));transition:width .2s;}
+  .nom.voted{border-color:var(--line-2);box-shadow:0 0 0 1px rgba(212,177,95,.25), var(--shadow);}
+  .nom.voted::before{width:3px;}
+  .nom.lead{
+    border-color:var(--line-2);
+    background:linear-gradient(180deg, rgba(212,177,95,.10), rgba(255,255,255,.02));
+    box-shadow:0 0 30px rgba(212,177,95,.14), inset 0 1px 0 rgba(255,255,255,.05);
+  }
+  .nom.lead::after{
+    content:"👑 LEADING";position:absolute;top:0;right:0;font-size:9px;letter-spacing:.16em;font-weight:800;
+    color:#1a1303;background:linear-gradient(180deg,var(--gold-2),var(--gold-3));padding:5px 10px;
+  }
+  .nom-top{display:flex;align-items:flex-start;gap:14px;}
+  .rank{
+    font-family:"Hiragino Mincho ProN","Times New Roman",serif;font-size:20px;font-weight:700;color:var(--gold);
+    font-variant-numeric:tabular-nums;min-width:24px;line-height:1.3;opacity:.85;
+  }
+  .nom.lead .rank{opacity:1;}
+  .nom-name{font-size:16.5px;font-weight:700;line-height:1.45;flex:1;word-break:break-word;letter-spacing:.01em;}
+  .nom-votes{text-align:right;flex:0 0 auto;}
+  .nom-votes .n{
+    font-family:"Hiragino Mincho ProN","Times New Roman",serif;font-size:30px;font-weight:700;line-height:1;
+    font-variant-numeric:tabular-nums;
+    background:linear-gradient(180deg,var(--gold-2),var(--gold-3));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .nom-votes .u{font-size:10px;color:var(--ink-soft);letter-spacing:.1em;}
+  .bar{height:4px;background:rgba(255,255,255,.06);margin:14px 0 12px;overflow:hidden;}
+  .bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--gold-3),var(--gold-2));box-shadow:0 0 10px rgba(212,177,95,.5);transition:width .55s cubic-bezier(.2,.8,.2,1);}
+  .voters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+  .chip{font-size:12px;background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--ink-soft);padding:4px 11px;display:inline-flex;align-items:center;gap:6px;}
+  .chip.me{background:linear-gradient(180deg,var(--gold-2),var(--gold-3));border-color:transparent;color:#1a1303;font-weight:800;}
+  .chip .x{cursor:pointer;font-weight:800;opacity:.5;}
+  .chip .x:hover{opacity:1;}
+  .none{font-size:12px;color:#5d6679;letter-spacing:.04em;}
+
+  button{font:inherit;cursor:pointer;border:none;border-radius:0;transition:filter .15s,background .15s,transform .1s;}
+  button:active{transform:translateY(1px);}
+  .nom-actions{display:flex;gap:8px;}
+  .btn-vote{
+    flex:1;padding:14px;font-weight:800;font-size:14px;letter-spacing:.08em;
+    background:linear-gradient(180deg,var(--gold-2),var(--gold-3));color:#1a1303;
+    box-shadow:0 6px 18px rgba(212,177,95,.25);
+  }
+  .btn-vote:hover{filter:brightness(1.06);}
+  .btn-vote.on{background:linear-gradient(180deg,#5ad6a0,var(--good));color:#06281b;box-shadow:0 6px 18px rgba(67,192,138,.25);}
+  .btn-edit-name,.btn-del{background:transparent;font-size:12px;padding:10px 13px;font-weight:700;border:1px solid var(--line);}
+  .btn-edit-name{color:var(--ink-soft);}
+  .btn-edit-name:hover{color:var(--gold);border-color:var(--line-2);}
+  .btn-del{color:var(--danger);}
+  .btn-del:hover{background:rgba(224,117,138,.10);border-color:var(--danger);}
+
+  /* ===== Add ===== */
+  .add-card{border:1px dashed var(--line-2);background:rgba(212,177,95,.04);padding:14px;display:flex;gap:8px;margin-top:14px;}
+  .add-card input{flex:1;}
+  .btn-add{flex:0 0 auto;background:linear-gradient(180deg,var(--gold-2),var(--gold-3));color:#1a1303;font-weight:800;font-size:13px;padding:0 20px;letter-spacing:.06em;}
+
+  /* ===== States ===== */
+  .empty{text-align:center;color:var(--ink-soft);padding:44px 18px;border:1px dashed var(--line);background:var(--card);font-size:13px;}
+  .empty b{display:block;color:var(--gold);margin-bottom:8px;font-size:14px;letter-spacing:.04em;}
+
+  .toast{
+    position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);
+    background:linear-gradient(180deg,#1c2c47,#13203a);border:1px solid var(--line-2);color:var(--ink);
+    padding:13px 22px;font-size:13.5px;font-weight:600;box-shadow:var(--shadow);
+    opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:50;max-width:90vw;text-align:center;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  /* ===== Setup / status ===== */
+  .setup{background:var(--card);border:1px solid var(--danger);padding:20px;margin-bottom:20px;backdrop-filter:blur(6px);}
+  .setup h3{margin:0 0 8px;font-size:15px;color:var(--gold-2);}
+  .setup ol{margin:8px 0 0;padding-left:20px;color:var(--ink-soft);font-size:13px;line-height:1.85;}
+  .setup code{background:rgba(0,0,0,.35);padding:2px 6px;font-size:12px;color:var(--gold-2);word-break:break-all;}
+  .setup pre{background:rgba(0,0,0,.4);border:1px solid var(--line);padding:12px;font-size:11.5px;color:var(--gold-2);overflow:auto;margin:10px 0 0;}
+  .conn{font-size:11px;color:var(--ink-soft);margin:20px 2px 0;display:flex;align-items:center;gap:7px;letter-spacing:.04em;}
+  .status-dot{width:7px;height:7px;border-radius:50%;background:#c0556b;flex:0 0 auto;}
+  .status-dot.ok{background:var(--good);box-shadow:0 0 8px rgba(67,192,138,.7);}
+  .status-dot.wait{background:var(--gold);}
+  footer{text-align:center;color:#4e576b;font-size:9px;margin-top:24px;letter-spacing:.3em;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="crest">🏆</div>
+    <p class="eyebrow">Monthly Recognition</p>
+    <h1 class="serif">Fukushima Excellence Award<span class="jp">今月の好取り組み 投票</span></h1>
+    <div class="rule"><i></i><b>FUKUSHIMA</b><i></i></div>
+    <p class="hero-sub">ノミネートされた取り組みから、最も優れたものに一票を。</p>
+  </header>
+
+  <!-- ルール未設定/権限エラー時のヘルプ -->
+  <div class="setup" id="ruleHelp" style="display:none">
+    <h3>⚠️ データベースの権限設定が必要です</h3>
+    <p style="font-size:13px;color:var(--ink-soft);margin:0">「権限がない（permission denied）」状態です。Firestore のルールを下記に設定すると動きます。</p>
+    <ol>
+      <li><a href="https://console.firebase.google.com/project/fukushima-excellence-award/firestore/rules" target="_blank" rel="noopener">このリンク</a>でルール画面を開く</li>
+      <li>表示中のテキストを<b>すべて消す</b></li>
+      <li>下のルールを<b>まるごと貼り付け</b></li>
+      <li>右上の<b>「公開」</b>ボタンを押す（最大1分で反映）</li>
+    </ol>
+    <pre>rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}</pre>
+  </div>
+
+  <div class="toolbar">
+    <div class="month-pick">
+      <label class="lbl" for="month">対象月</label>
+      <input type="month" id="month" />
+    </div>
+    <button class="toggle-edit" id="editToggle">✎ 編集</button>
+  </div>
+
+  <div class="id-card">
+    <label class="lbl" for="surname">投票するあなたの姓</label>
+    <div class="id-row">
+      <input type="text" id="surname" placeholder="例）福島" maxlength="12" autocomplete="off" />
+      <span class="pill-you" id="youPill" style="display:none"></span>
+    </div>
+  </div>
+
+  <div class="sec-head">
+    <h2>NOMINEES</h2>
+    <span class="count" id="totalCount">投票総数 0</span>
+  </div>
+
+  <div class="nominees" id="list"></div>
+
+  <div class="add-card" id="addCard" style="display:none">
+    <input type="text" id="newNom" placeholder="新しい取り組み名" maxlength="80" />
+    <button class="btn-add" id="addBtn">追加</button>
+  </div>
+
+  <p class="conn"><span class="status-dot" id="dot"></span><span id="connTxt">接続待ち…</span></p>
+
+  <footer>FUKUSHIMA EXCELLENCE AWARD</footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+const firebaseConfig = {
+  apiKey:            "AIzaSyCoCytqHmJq6pNHrGP8Q7FhRH8g_Nz5B8g",
+  authDomain:        "fukushima-excellence-award.firebaseapp.com",
+  projectId:         "fukushima-excellence-award",
+  storageBucket:     "fukushima-excellence-award.firebasestorage.app",
+  messagingSenderId: "877159869862",
+  appId:             "1:877159869862:web:0d70b05beb498dc4fd3367",
+  measurementId:     "G-VYD3P3HQHZ"
+};
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, onSnapshot, runTransaction }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const thisMonth = ()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");};
+
+const LS_NAME="fea_surname", LS_MONTH="fea_month";
+const monthEl=$("month"), surnameEl=$("surname"), youPill=$("youPill");
+monthEl.value = localStorage.getItem(LS_MONTH) || thisMonth();
+surnameEl.value = localStorage.getItem(LS_NAME) || "";
+updateYouPill();
+
+let db=null, unsub=null, state=null, editMode=false;
+function setDot(cls,txt){ const d=$("dot"); d.className="status-dot "+cls; $("connTxt").textContent=txt; }
+
+try{
+  db = getFirestore(initializeApp(firebaseConfig));
+  setDot("wait","接続中…");
+  subscribe();
+}catch(e){ setDot("","初期化エラー: "+e.message); }
+
+function docRef(){ return doc(db,"awards","month_"+monthEl.value); }
+
+function subscribe(){
+  if(unsub) unsub();
+  if(!db) return;
+  state=null; render();
+  unsub = onSnapshot(docRef(),
+    snap=>{
+      $("ruleHelp").style.display="none";
+      setDot("ok","同期中 · "+monthEl.value);
+      state = snap.exists()?snap.data():{nominees:[],votes:{}};
+      state.nominees=state.nominees||[]; state.votes=state.votes||{};
+      render();
+    },
+    err=>{
+      if(err.code==="permission-denied"){
+        $("ruleHelp").style.display="block";
+        setDot("","権限エラー：上の手順でルールを設定してください");
+        window.scrollTo({top:0,behavior:"smooth"});
+      }else{
+        setDot("","接続エラー: "+err.message);
+      }
+    }
+  );
+}
+
+async function mutate(fn){
+  if(!db) return;
+  try{
+    await runTransaction(db, async tx=>{
+      const ref=docRef(); const snap=await tx.get(ref);
+      const cur=snap.exists()?snap.data():{nominees:[],votes:{}};
+      cur.nominees=cur.nominees||[]; cur.votes=cur.votes||{};
+      fn(cur); tx.set(ref,cur);
+    });
+  }catch(e){
+    if(e.code==="permission-denied"){ $("ruleHelp").style.display="block"; window.scrollTo({top:0,behavior:"smooth"}); }
+    toast("保存に失敗: "+(e.message||e));
+  }
+}
+
+function vote(nid){
+  const name=surnameEl.value.trim();
+  if(!name){ surnameEl.focus(); toast("先にあなたの姓を入力してください"); return; }
+  mutate(cur=>{ if(cur.votes[name]===nid) delete cur.votes[name]; else cur.votes[name]=nid; });
+}
+function addNominee(){
+  const v=$("newNom").value.trim(); if(!v) return;
+  mutate(cur=>cur.nominees.push({id:"n"+Date.now()+Math.floor(Math.random()*999),name:v}));
+  $("newNom").value="";
+}
+function renameNominee(nid){
+  const n=state.nominees.find(x=>x.id===nid); if(!n) return;
+  const v=prompt("取り組み名を編集",n.name); if(v===null) return;
+  const t=v.trim(); if(!t) return;
+  mutate(cur=>{const x=cur.nominees.find(y=>y.id===nid); if(x)x.name=t;});
+}
+function delNominee(nid){
+  const n=state.nominees.find(x=>x.id===nid);
+  if(!confirm("「"+(n?n.name:"")+"」を削除しますか？\n（この取り組みへの投票も削除されます）")) return;
+  mutate(cur=>{
+    cur.nominees=cur.nominees.filter(x=>x.id!==nid);
+    for(const k in cur.votes){ if(cur.votes[k]===nid) delete cur.votes[k]; }
+  });
+}
+function removeVoter(name){ mutate(cur=>{ delete cur.votes[name]; }); }
+
+function tally(){
+  const map={}; (state?.nominees||[]).forEach(n=>map[n.id]=[]);
+  const v=state?.votes||{};
+  for(const name in v){ if(map[v[name]]) map[v[name]].push(name); }
+  return map;
+}
+function render(){
+  const list=$("list");
+  if(!state){ list.innerHTML='<div class="empty"><b>読み込み中…</b></div>'; return; }
+
+  const me=surnameEl.value.trim();
+  const voters=tally();
+  const counts=state.nominees.map(n=>voters[n.id].length);
+  const max=Math.max(1,...counts);
+  const total=counts.reduce((a,b)=>a+b,0);
+  $("totalCount").textContent="投票総数 "+total;
+
+  const ranked=[...state.nominees].map(n=>({n,c:voters[n.id].length})).sort((a,b)=>b.c-a.c);
+  const rankOf={}; ranked.forEach((r,i)=>rankOf[r.n.id]=i+1);
+  const leadCount=ranked.length?ranked[0].c:0;
+
+  if(state.nominees.length===0){
+    list.innerHTML='<div class="empty"><b>まだノミネートがありません</b>「✎ 編集」から取り組みを追加してください（誰でも編集可）。</div>';
+    return;
+  }
+
+  list.innerHTML=state.nominees.map(n=>{
+    const vs=voters[n.id], c=vs.length;
+    const mine=me&&state.votes[me]===n.id;
+    const isLead=total>0&&c===leadCount&&c>0;
+    const pct=total>0?Math.round(c/max*100):0;
+    const chips=vs.map(name=>
+      `<span class="chip ${name===me?'me':''}">${esc(name)}${editMode?`<span class="x" data-unvote="${esc(name)}">×</span>`:''}</span>`
+    ).join("");
+    return `
+    <div class="nom ${mine?'voted':''} ${isLead?'lead':''}">
+      <div class="nom-top">
+        <div class="rank">${rankOf[n.id]}</div>
+        <div class="nom-name">${esc(n.name)}</div>
+        <div class="nom-votes"><div class="n">${c}</div><div class="u">VOTES</div></div>
+      </div>
+      <div class="bar"><i style="width:${pct}%"></i></div>
+      <div class="voters">${chips||'<span class="none">まだ投票なし</span>'}</div>
+      ${editMode?`
+        <div class="nom-actions">
+          <button class="btn-edit-name" data-rename="${n.id}">✎ 名称を編集</button>
+          <button class="btn-del" data-del="${n.id}">削除</button>
+        </div>`:`
+        <div class="nom-actions">
+          <button class="btn-vote ${mine?'on':''}" data-vote="${n.id}">${mine?'✓ 投票済み（取消）':'これに投票'}</button>
+        </div>`}
+    </div>`;
+  }).join("");
+
+  list.querySelectorAll("[data-vote]").forEach(b=>b.onclick=()=>vote(b.dataset.vote));
+  list.querySelectorAll("[data-rename]").forEach(b=>b.onclick=()=>renameNominee(b.dataset.rename));
+  list.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>delNominee(b.dataset.del));
+  list.querySelectorAll("[data-unvote]").forEach(b=>b.onclick=()=>removeVoter(b.dataset.unvote));
+}
+
+$("editToggle").onclick=()=>{
+  editMode=!editMode;
+  $("editToggle").classList.toggle("on",editMode);
+  $("editToggle").textContent=editMode?"✓ 完了":"✎ 編集";
+  $("addCard").style.display=editMode?"flex":"none";
+  render();
+};
+$("addBtn").onclick=addNominee;
+$("newNom").addEventListener("keydown",e=>{if(e.key==="Enter")addNominee();});
+monthEl.onchange=()=>{ localStorage.setItem(LS_MONTH,monthEl.value); subscribe(); };
+surnameEl.addEventListener("input",()=>{ localStorage.setItem(LS_NAME,surnameEl.value.trim()); updateYouPill(); render(); });
+function updateYouPill(){
+  const v=surnameEl.value.trim();
+  youPill.style.display=v?"inline-flex":"none";
+  youPill.textContent=v?v+" さん":"";
+}
+let toastT;
+function toast(msg){
+  const t=$("toast"); t.textContent=msg; t.classList.add("show");
+  clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove("show"),2600);
+}
+</script>
+</body>
+</html>
